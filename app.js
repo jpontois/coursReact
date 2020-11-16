@@ -1,40 +1,57 @@
-class Incrementer extends React.Component {
+class ManualIncrementer extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            increment: props.start
+            n: 0,
+            timer: null
         }
-        this.timer = null
     }
 
-    componentDidMount() {
-        this.timer = window.setInterval(() => this.tick(), 1000)
+    play () {
+        window.clearInterval(this.state.timer)
+        this.setState({
+            timer: window.setInterval(() => this.tick(), 1000),
+        })
     }
 
-    componentWillUnmount() {
-        window.clearInterval(this.timer)
+    pause () {
+        window.clearInterval(this.state.timer)
+        this.setState({
+            timer: null,
+        })
+    }
+
+    label () {
+        return (this.state.label) ? 'Démarrer' : 'Arrêter'
+    }
+
+    reset () {
+        this.pause()
+        this.setState()
+        this.play()
     }
 
     tick() {
-        this.setState((state, props) => (
-            {
-                increment: state.increment + props.step
-            }
-        ))
+        this.setState((state, props) => ({n: state.n + 1}))
+    }
+
+    toggle() {
+        (this.state.timer) ? this.pause() : this.play()
     }
 
     render() {
-        const {increment} = this.state
-        return <div>Ceci est l'incrément : {increment}</div>
+        return (
+            <div>
+                Valeur : {this.state.n}
+                <br/>
+                <button onClick={this.toggle.bind(this)}>{this.label}</button>
+                {(this.state.timer) ? <button onClick={this.toggle.bind(this)}>{this.label}</button> : ''}
+            </div>
+        )
     }
 }
 
-Incrementer.defaultProps = {
-    start: 0,
-    step: 1
-}
-
 ReactDOM.render(
-    <Incrementer step={2}/>,
+    <ManualIncrementer/>,
     document.querySelector('#app')
 )
