@@ -5,10 +5,11 @@ class Incrementer extends React.Component {
             increment: props.start
         }
         this.timer = null
+        this.step = props.step || 1
     }
 
     componentDidMount() {
-        this.timer = window.setInterval(() => this.tick(), 1000)
+        this.timer = window.setInterval(() => this.tick(), this.step * 1000)
     }
 
     componentWillUnmount() {
@@ -18,7 +19,7 @@ class Incrementer extends React.Component {
     tick() {
         this.setState((state, props) => (
             {
-                increment: state.increment + 1
+                increment: state.increment + props.step
             }
         ))
     }
@@ -30,6 +31,6 @@ class Incrementer extends React.Component {
 }
 
 ReactDOM.render(
-    <Incrementer start={10}/>,
+    <Incrementer start={10} step={2}/>,
     document.querySelector('#app')
 )
