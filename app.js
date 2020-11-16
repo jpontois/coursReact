@@ -1,57 +1,41 @@
-class ManualIncrementer extends React.Component {
+class Formulaire extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            n: 0,
-            timer: null
+            firstName: undefined,
+            lastName: undefined,
+            sub: false
         }
+        this.handleChange = this.handleChange.bind(this)
     }
 
-    play () {
-        window.clearInterval(this.state.timer)
+    handleChange (e) {
         this.setState({
-            timer: window.setInterval(() => this.tick(), 1000),
+            [e.target.name]: e.target.value
         })
-    }
-
-    pause () {
-        window.clearInterval(this.state.timer)
-        this.setState({
-            timer: null,
-        })
-    }
-
-    label () {
-        return (this.state.label) ? 'Démarrer' : 'Arrêter'
-    }
-
-    reset () {
-        this.pause()
-        this.setState()
-        this.play()
-    }
-
-    tick() {
-        this.setState((state, props) => ({n: state.n + 1}))
-    }
-
-    toggle() {
-        (this.state.timer) ? this.pause() : this.play()
     }
 
     render() {
         return (
-            <div>
-                Valeur : {this.state.n}
+            <form>
+                <label htmlFor="firstName">Nom</label>
+                <input
+                    name="firstName"
+                    type="text"
+                    onChange={this.handleChange}
+                />
                 <br/>
-                <button onClick={this.toggle.bind(this)}>{this.label}</button>
-                {(this.state.timer) ? <button onClick={this.toggle.bind(this)}>{this.label}</button> : ''}
-            </div>
+                <label htmlFor="lastName">Prénom</label>
+                <input name="lastName" type="text"/>
+                <br/>
+                <label htmlFor="sub">S'abonner à la newsletter</label>
+                <input name="sub" type="checkbox"/>
+            </form>
         )
     }
 }
 
 ReactDOM.render(
-    <ManualIncrementer/>,
+    <Formulaire/>,
     document.querySelector('#app')
 )
